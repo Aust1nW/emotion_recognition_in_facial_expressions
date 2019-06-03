@@ -23,25 +23,32 @@ for line in labels_file.readlines():
     line = list(line.split(','))
     line[2] = re.sub(r'\n', '', line[2])
     src = os.path.join('./images/', line[1])
-    if line[2] == 'happiness' or 'HAPPINESS':
+    if line[2] == 'happiness' or line[2] == 'HAPPINESS':
+        condition = 1
         dst = os.path.join('./train/happy', line[1])
         shutil.copyfile(src, dst)
-    elif line[2] == 'anger' or 'ANGER':
+    elif line[2] == 'anger' or line[2] == 'ANGER':
+        condition = 2
         dst = os.path.join('./train/anger', line[1])
         shutil.copyfile(src, dst)
-    elif line[2] == 'fear' or 'FEAR':
+    elif line[2] == 'fear' or line[2] == 'FEAR':
+        condition = 3
         dst = os.path.join('./train/fear', line[1])
         shutil.copyfile(src, dst)
-    elif line[2] == 'neutral' or 'NEUTRAL':
+    elif line[2] == 'neutral' or line[2] == 'NEUTRAL':
+        condition = 4
         dst = os.path.join('./train/neutral', line[1])
         shutil.copyfile(src, dst)
-    elif line[2] == 'sad' or 'SAD':
+    elif line[2] == 'sad' or line[2] == 'SAD':
+        condition = 5
         dst = os.path.join('./train/sad', line[1])
         shutil.copyfile(src, dst)
-    elif line[2] == 'disgust' or 'DISGUST':
+    elif line[2] == 'disgust' or line[2] == 'DISGUST':
+        condition = 6
         dst = os.path.join('./train/disgust', line[1])
         shutil.copyfile(src, dst)
     else:
         print("File not processed " + line[1] + " the emotion is " + line[2])
-
-
+    prin
+print(count)
+t
