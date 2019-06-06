@@ -17,7 +17,7 @@ disgust_dir = os.path.join('./train/', 'disgust')
 os.mkdir(disgust_dir)
 surprise_dir = os.path.join('./train/', 'surprise')
 os.mkdir(surprise_dir)
-contempt_dir = os.path.join('./trian/', 'contempt')
+contempt_dir = os.path.join('./train/', 'contempt')
 os.mkdir(contempt_dir)
 labels_file = open('./data/legend.csv', 'r')
 

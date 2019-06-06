@@ -14,7 +14,9 @@ happy_dir = os.path.join('./train/', 'happy')
 
 fnames = [os.path.join(happy_dir, fname) for fname in os.listdir(happy_dir)]
 
-img_path = fnames[3]
+print(len(fnames))
+
+img_path = fnames[1]
 
 img = image.load_img(img_path, target_size=(150,150))
 
