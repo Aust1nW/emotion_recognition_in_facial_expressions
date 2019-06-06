@@ -7,6 +7,11 @@ from keras import layers
 import matplotlib.pyplot as plt
 import cv2
 
+# TODO LIST
+# 1. Separate data into validation data and store that in a validation directory
+# 2. Try other model architectures, ResNet and VGG-Face
+# 3. Test Heatmap in Jupyter Notebook
+
 
 def vgg_build_model():
     m = VGG16(weights='imagenet', include_top=False, input_shape=(44, 44, 3))
@@ -77,13 +82,14 @@ plt.legend()
 
 plt.show()
 
+
+# Values set to 0 are placeholders
 sample_image = 0
 preds = model.predict(sample_image)
 x = np.argmax(preds[0])
 output = model.output[:, 386]
 
 # Start the Heatmap
-# TODO Do heatmap
 last_conv_layer = model.get_layer('block5_conv3')
 grads = K.gradients(output, last_conv_layer.output)[0]
 pooled_grads = K.mean(grads, axis=(0, 1, 2))
@@ -93,6 +99,8 @@ pooled_grads_value, conv_layer_output_value = iterate([sample_image])
 for i in range(512):
     conv_layer_output_value[:, :, i] *= pooled_grads_value[i]
 
+
+# Visualize the heatmap
 heatmap = np.mean(conv_layer_output_value, axis=-1)
 heatmap = np.maximum(heatmap, 0)
 heatmap /= np.max(heatmap)
@@ -100,7 +108,19 @@ plt.matshow(heatmap)
 plt.show()
 
 
-# We use cv2 to load the original image
+# Start layering the heatmap on top of the original image
+# The local path to our target image
+img_path = './test_dat/7b.jpg'
+img = image.load_img(img_path, target_size=(44, 44))
+
+# `x` is a float32 Numpy array of shape (44, 44, 3)
+x = image.img_to_array(img)
+
+
+x = np.expand_dims(x, axis=0)
+
+preds = model.predict(x)
+
 img = cv2.imread(img_path)
 
 # We resize the heatmap to have the same size as the original image
@@ -116,4 +136,4 @@ heatmap = cv2.applyColorMap(heatmap, cv2.COLORMAP_JET)
 superimposed_img = heatmap * 0.4 + img
 
 # Save the image to disk
-cv2.imwrite('/Users/fchollet/Downloads/elephant_cam.jpg', superimposed_img)
+cv2.imwrite('./heatmap/heatmap_output.jpg', superimposed_img)
