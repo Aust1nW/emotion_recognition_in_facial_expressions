@@ -4,8 +4,10 @@ from keras.preprocessing import image
 import os
 from keras.applications.vgg16 import VGG16
 from keras import layers
+from keras import Model
+from keras import Sequential
 import matplotlib.pyplot as plt
-import cv2
+#import cv2
 
 # TODO LIST
 # 1. Separate data into validation data and store that in a validation directory
@@ -14,7 +16,8 @@ import cv2
 
 
 def vgg_build_model():
-    m = VGG16(weights='imagenet', include_top=False, input_shape=(44, 44, 3))
+    m = Sequential()
+    m.add(VGG16(weights='imagenet', include_top=False, input_shape=(44, 44, 1)))
     m.add(layers.Flatten())
     m.add(layers.Dense(128, activation='relu'))
     m.add(layers.Dropout(0.5))
