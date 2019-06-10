@@ -16,7 +16,7 @@ fnames = [os.path.join(happy_dir, fname) for fname in os.listdir(happy_dir)]
 
 print(len(fnames))
 
-img_path = fnames[1]
+img_path = fnames[3]
 
 img = image.load_img(img_path, target_size=(150,150))
 

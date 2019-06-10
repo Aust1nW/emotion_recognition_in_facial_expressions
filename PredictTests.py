@@ -8,18 +8,16 @@ import numpy as np
 
 def predict(model, fname):
     path = os.path.join('./realTests', fname)
-    image = image.load(path, target_size=(350,350))
-    x = image.img_to_array(image)
+    img = image.load_img(path, target_size=(350,350))
+    x = image.img_to_array(img)
     x = np.expand_dims(x, axis=0)
     x = preprocess_input(x)
     preds = model.predict(x)
     return np.argmax(preds[0])
 
 
-
-
 def main():
-    model = load_model('vgg1.h5')
+    model = load_model('vgg2.h5')
     test_files = open('./data/500_picts_satz.csv', 'r')
     
     fear = 0
@@ -36,10 +34,12 @@ def main():
         line = list(line.split(','))
         line[2] = re.sub(r'\n', '', line[2])
         emotion = line[2]
+        if emotion == 'happiness':
+            emotion = 'happy'
+
         fname = line[1]
-        val = predict(None, fname)
+        val = predict(model, fname)
         actual = class_map[emotion]
-        print(actual, val)
         if(actual == val):
             correct = True
     
@@ -48,7 +48,7 @@ def main():
         elif correct and val == 1:
             fear += 1
         elif correct and val == 2:
-            happy += 1
+            happiness += 1
         elif correct and val == 3:
             neutral+= 1
         elif correct and val == 4:
