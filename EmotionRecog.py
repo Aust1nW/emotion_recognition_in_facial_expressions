@@ -7,6 +7,7 @@ from keras import layers
 from keras import Model
 from keras import Sequential
 import matplotlib.pyplot as plt
+import json
 #import cv2
 
 # TODO LIST
@@ -30,7 +31,7 @@ def vgg_build_model():
     m.add(layers.Flatten())
     m.add(layers.Dense(256, activation='relu'))
     m.add(layers.Dropout(0.5))
-    m.add(layers.Dense(8, activation='softmax'))
+    m.add(layers.Dense(5, activation='softmax'))
     return m
 
 
@@ -56,6 +57,10 @@ train_gen = train_datagen.flow_from_directory(
     batch_size=32,
     class_mode='categorical')
 
+label_map = train_gen.class_indices
+with open('class_map.json', 'w') as fname:
+   fname.write(json.dumps(label_map))
+
 val_gen = val_datagen.flow_from_directory(
     val_dir,
     target_size=(44, 44),
@@ -70,7 +75,8 @@ history = model.fit_generator(train_gen,
                               epochs=10,
                               validation_data=val_gen,
                               validation_steps=32)
-#
+model.save('vgg1.h5')
+
 ## Plot the results
 #acc = history.history['acc']
 #val_acc = history.history['val_acc']

@@ -1,4 +1,5 @@
 import re
+import json
 import os
 from keras.models import load_model
 from keras.preprocessing import image
@@ -18,7 +19,7 @@ def predict(model, fname):
 
 
 def main():
-    #model = load_model()
+    model = load_model('vgg1.h5')
     test_files = open('./data/500_picts_satz.csv', 'r')
     
     fear = 0
@@ -27,29 +28,38 @@ def main():
     anger = 0
     sad = 0
     correct = False
+    with open('class_map.json', 'r') as fname:
+        fstr = fname.read()
+        class_map = json.loads(fstr)
+
     for line in test_files.readlines():
         line = list(line.split(','))
         line[2] = re.sub(r'\n', '', line[2])
         emotion = line[2]
         fname = line[1]
         val = predict(None, fname)
+        actual = class_map[emotion]
+        print(actual, val)
+        if(actual == val):
+            correct = True
     
-    
-        #if correct and val == :
-        #    fear += 1
-        #elif correct and val == :
-        #    happines += 1
-        #elif correct and val == :
-        #    neutral += 1
-        #elif correct and val == :
-        #    anger+= 1
-        #elif correct and val == :
-        #    sad += 1
+        if correct and val == 0:
+            anger += 1
+        elif correct and val == 1:
+            fear += 1
+        elif correct and val == 2:
+            happy += 1
+        elif correct and val == 3:
+            neutral+= 1
+        elif correct and val == 4:
+            sad += 1
+
+        correct = False
 
     fear_acc = fear / 54
     happy_acc = happiness / 197
     neutral_acc = neutral / 84
-    anger_acc = anger_acc / 115
+    anger_acc = anger / 115
     sad_acc = sad / 50
 
     print('Fear acc:    %.2f' % fear_acc)
