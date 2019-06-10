@@ -21,8 +21,11 @@ def vgg_build_model():
     set_trainable = False
     m = Sequential()
     conv_base = ResNet50(weights='imagenet', include_top=False, input_shape=(66, 66, 3))
+    conv_base.summary()
     for layer in conv_base.layers:
-        if layer.name == 'block_conv1':
+        if (layer.name == 'res5c_branch2c' or 
+           layer.name == 'res5c_branch2b' or
+           layer.name == 'res5c_branch2a'):
             set_trainable = True
         if set_trainable:
             layer.trainable = True
@@ -58,9 +61,9 @@ train_gen = train_datagen.flow_from_directory(
     batch_size=32,
     class_mode='categorical')
 
-label_map = train_gen.class_indices
-with open('class_map.json', 'w') as fname:
-   fname.write(json.dumps(label_map))
+#label_map = train_gen.class_indices
+#with open('class_map.json', 'w') as fname:
+#   fname.write(json.dumps(label_map))
 
 val_gen = val_datagen.flow_from_directory(
     val_dir,
